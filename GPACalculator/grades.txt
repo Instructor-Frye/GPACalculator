@@ -1,0 +1,5 @@
+SP23,CS 212,Computer Science II: Paradigms,4,A
+SP23,CS 254,Computer Organization,3,B
+SP23,WR 112,Writing II: Analysis & Research,3,B
+SP23,WR 102,Writing Studio II,1,A
+SP23,CO 131,Introduction to Communications,3,B

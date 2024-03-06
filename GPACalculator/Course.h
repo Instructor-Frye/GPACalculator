@@ -25,6 +25,7 @@ class Course
 		void setCourse(std::string newSemesterTag, std::string newCourseTag,
 					   std::string newCourseName, std::string newLetterGrade,
 					   double newCredits);
+		void setCourse(std::string courseData);
 		double calculateGradeValue();
 };
 

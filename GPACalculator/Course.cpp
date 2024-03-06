@@ -10,28 +10,7 @@ Course::Course()
 
 Course::Course(std::string courseStr)
 {
-	int commaPos;
-	int lastCommaPos;
-	
-	commaPos = courseStr.find(',');
-	setSemesterTag(courseStr.substr(0, commaPos - 1));
-	lastCommaPos = commaPos;
-
-	commaPos = courseStr.find(',', lastCommaPos + 1);
-	setCourseTag(courseStr.substr(lastCommaPos + 1, commaPos - 1));
-	lastCommaPos = commaPos;
-
-	commaPos = courseStr.find(',', lastCommaPos + 1);
-	setCourseName(courseStr.substr(lastCommaPos + 1, commaPos - 1));
-	lastCommaPos = commaPos;
-
-	commaPos = courseStr.find(',', lastCommaPos + 1);
-	setCredits(std::stod(courseStr.substr(lastCommaPos + 1, commaPos - 1)));
-	lastCommaPos = commaPos;
-
-	setLetterGrade(courseStr.substr(lastCommaPos + 1, courseStr.size()));
-
-
+	setCourse(courseStr);
 }
 
 std::string Course::getSemesterTag()
@@ -92,7 +71,7 @@ void Course::setLetterGrade(std::string newLetterGrade)
 		else if (newLetterGrade.size() == 2)
 		{
 			if (newLetterGrade[1] == '+' ||
-				newLetterGrade[2] == '-')
+				newLetterGrade[1] == '-')
 			{
 				letterGrade = newLetterGrade;
 			}
@@ -117,6 +96,31 @@ void Course::setCourse(std::string newSemesterTag, std::string newCourseTag,
 	setCourseName(newCourseName);
 	setLetterGrade(newLetterGrade);
 	setCredits(newCredits);
+}
+
+void Course::setCourse(std::string courseStr)
+{
+	size_t commaPos;
+	size_t lastCommaPos;
+
+	commaPos = courseStr.find(',');
+	setSemesterTag(courseStr.substr(0, commaPos - 1));
+	lastCommaPos = commaPos;
+
+	commaPos = courseStr.find(',', lastCommaPos + 1);
+	setCourseTag(courseStr.substr(lastCommaPos + 1, commaPos - lastCommaPos - 1));
+	lastCommaPos = commaPos;
+
+	commaPos = courseStr.find(',', lastCommaPos + 1);
+	setCourseName(courseStr.substr(lastCommaPos + 1, commaPos - lastCommaPos - 1));
+	lastCommaPos = commaPos;
+
+	commaPos = courseStr.find(',', lastCommaPos + 1);
+	setCredits(std::stod(courseStr.substr(lastCommaPos + 1, commaPos - lastCommaPos - 1)));
+	lastCommaPos = commaPos;
+
+	setLetterGrade(courseStr.substr(lastCommaPos + 1, courseStr.size()));
+
 }
 
 double Course::calculateGradeValue()
