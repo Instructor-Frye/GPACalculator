@@ -4,7 +4,7 @@
 Course::Course()
 {
 	semesterTag = "SP24";
-	letterGrade = "A";
+	letterGrade = "Error";
 	credits = 0;
 }
 
@@ -66,7 +66,7 @@ void Course::setLetterGrade(std::string newLetterGrade)
 	{
 		if (newLetterGrade.size() == 1)
 		{
-			newLetterGrade = newLetterGrade;
+			letterGrade = newLetterGrade;
 		}
 		else if (newLetterGrade.size() == 2)
 		{

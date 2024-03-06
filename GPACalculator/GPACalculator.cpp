@@ -12,9 +12,10 @@ const int COURSE_GRADE_COL_SIZE = 6;
 
 int GetUserChoice();
 void DisplayReport(std::vector<Course> listOfCourses);
-void SaveReport();
+void SaveReport(std::vector<Course> listOfCourses);
 void AddClass();
 void PrintDivider();
+void printReport(std::ostream& output, std::vector<Course> listOfCourses);
 std::vector<Course> readCourses();
 
 
@@ -38,7 +39,7 @@ int main()
         }
         else if (userChoice == 2)
         {
-            SaveReport();
+            SaveReport(listOfCourses);
         }
         else if (userChoice == 3)
         {
@@ -70,39 +71,16 @@ int GetUserChoice()
 
 void DisplayReport(std::vector<Course> listOfCourses)
 {
-    std::string semesterTag;
-    std::string semesterName;
-    semesterTag = listOfCourses[0].getSemesterTag();
-    if (semesterTag.substr(0,2) == "SP")
-    {
-        semesterName = "Spring 20" + semesterTag.substr(2, 2);
-    }
-    else if (semesterTag.substr(0, 2) == "FA")
-    {
-        semesterName = "Fall 20" + semesterTag.substr(2, 2);
-    }
-    else
-    {
-        semesterName = "Summer 20" + semesterTag.substr(2, 2);
-    }
-    std::cout << std::setw((CONSOLE_WIDTH / 2) + (semesterName.size() / 2)) << std::right << semesterName << "\n";
-    std::cout << std::left << std::setw(COURSE_ID_COL_SIZE) << "Cousre ID";
-    std::cout << std::setw(COURSE_NAME_COL_SIZE) << "Course Name";
-    std::cout << std::setw(COURSE_CREDITS_COL_SIZE) << "Credits";
-    std::cout << std::setw(COURSE_GRADE_COL_SIZE) << "Grade" << "\n";
-    for (int index = 0; index < listOfCourses.size(); index++)
-    {
-        std::cout << std::setw(COURSE_ID_COL_SIZE) << listOfCourses[index].getCourseTag();
-        std::cout << std::setw(COURSE_NAME_COL_SIZE) << listOfCourses[index].getCourseName();
-        std::cout << std::setw(COURSE_CREDITS_COL_SIZE) << listOfCourses[index].getCredits();
-        std::cout << std::setw(COURSE_GRADE_COL_SIZE) << listOfCourses[index].getLetterGrade() << "\n";
-
-    }
+    printReport(std::cout, listOfCourses);
 }
 
-void SaveReport()
+void SaveReport(std::vector<Course> listOfCourses)
 {
-    std::cout << "Report Saved.\n\n";
+    std::ofstream outputFile;
+
+    outputFile.open("report.txt");
+    printReport(outputFile, listOfCourses);
+    outputFile.close();
 }
 
 void AddClass()
@@ -136,5 +114,46 @@ std::vector<Course> readCourses()
     inputFile.close();
 
     return newCourses;
+}
+
+
+void printReport(std::ostream &output, std::vector<Course> listOfCourses)
+{
+    std::string semesterTag;
+    std::string semesterName;
+    double totalCredits = 0.0;
+    double totalGradeValue = 0.0;
+
+
+    semesterTag = listOfCourses[0].getSemesterTag();
+    if (semesterTag.substr(0, 2) == "SP")
+    {
+        semesterName = "Spring 20" + semesterTag.substr(2, 2);
+    }
+    else if (semesterTag.substr(0, 2) == "FA")
+    {
+        semesterName = "Fall 20" + semesterTag.substr(2, 2);
+    }
+    else
+    {
+        semesterName = "Summer 20" + semesterTag.substr(2, 2);
+    }
+    output << std::setw((CONSOLE_WIDTH / 2) + (semesterName.size() / 2)) << std::right << semesterName << "\n";
+    output << std::left << std::setw(COURSE_ID_COL_SIZE) << "Cousre ID";
+    output << std::setw(COURSE_NAME_COL_SIZE) << "Course Name";
+    output << std::setw(COURSE_CREDITS_COL_SIZE) << "Credits";
+    output << std::setw(COURSE_GRADE_COL_SIZE) << "Grade" << "\n";
+    for (int index = 0; index < listOfCourses.size(); index++)
+    {
+        output << std::setw(COURSE_ID_COL_SIZE) << listOfCourses[index].getCourseTag();
+        output << std::setw(COURSE_NAME_COL_SIZE) << listOfCourses[index].getCourseName();
+        output << std::setw(COURSE_CREDITS_COL_SIZE) << listOfCourses[index].getCredits();
+        output << std::setw(COURSE_GRADE_COL_SIZE) << listOfCourses[index].getLetterGrade() << "\n";
+        totalCredits = totalCredits + listOfCourses[index].getCredits();
+        totalGradeValue = totalGradeValue + (listOfCourses[index].calculateGradeValue() * listOfCourses[index].getCredits());
+    }
+    output << std::right << std::setw(COURSE_ID_COL_SIZE + COURSE_NAME_COL_SIZE) << "Credits: " << totalCredits;
+    output << std::setw(COURSE_CREDITS_COL_SIZE) << "GPA: " << totalGradeValue / totalCredits << "\n";
+
 }
 
