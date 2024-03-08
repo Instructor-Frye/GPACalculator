@@ -5,4 +5,6 @@ CS 254      Computer Organization                   3         B
 WR 112      Writing II: Analysis & Research         3         B     
 WR 102      Writing Studio II                       1         A     
 CO 131      Introduction to Communications          3         B     
-                                           Credits: 14     GPA: 3.35714
+CS 313      Algorithms and Data Structures          4         A-    
+CS 256      Systems Programming                     3         B     
+                                           Credits: 21     GPA: 3.36571

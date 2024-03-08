@@ -2,6 +2,7 @@
 #include <fstream>
 #include <vector>
 #include <iomanip>
+#include <string>
 #include "Course.h"
 
 const int CONSOLE_WIDTH = 120;
@@ -13,7 +14,7 @@ const int COURSE_GRADE_COL_SIZE = 6;
 int GetUserChoice();
 void DisplayReport(std::vector<Course> listOfCourses);
 void SaveReport(std::vector<Course> listOfCourses);
-void AddClass();
+void AddClass(std::vector<Course> &listOfCourses);
 void PrintDivider();
 void printReport(std::ostream& output, std::vector<Course> listOfCourses);
 std::vector<Course> readCourses();
@@ -43,7 +44,7 @@ int main()
         }
         else if (userChoice == 3)
         {
-            AddClass();
+            AddClass(listOfCourses);
         }
         else if (userChoice == 4)
         {
@@ -83,9 +84,47 @@ void SaveReport(std::vector<Course> listOfCourses)
     outputFile.close();
 }
 
-void AddClass()
+void AddClass(std::vector<Course> &listOfCourses)
 {
-    std::cout << "Class Added.\n\n";
+    std::string semesterTag, courseTag, courseName, courseGrade;
+    double courseCredits;
+    Course newCourse;
+
+    std::cin.ignore(256, '\n');
+    // Prompt for input
+    std::cout << "Enter Semester (EX:SP24): ";
+    std::getline(std::cin, semesterTag);
+
+    std::cout << "Enter Course Tag(EX:CS 112): ";
+    std::getline(std::cin, courseTag);
+
+    std::cout << "Enter Course Name: ";
+    std::getline(std::cin, courseName);
+
+    std::cout << "Enter Course Credits: ";
+    std::cin >> courseCredits;
+
+    std::cout << "Enter Course Grade: ";
+    std::cin >> courseGrade;
+
+    // Append the information to grades.txt
+    std::ofstream outputFile("grades.txt", std::ios::app);
+    if (outputFile.is_open()) {
+        outputFile << "\n" << semesterTag << "," << courseTag << "," << courseName << "," << courseCredits << "," << courseGrade;
+        outputFile.close();
+        std::cout << "Course information appended to grades.txt successfully." << std::endl;
+    }
+    else {
+        std::cout << "Unable to open file grades.txt" << std::endl;
+    }
+
+    newCourse.setSemesterTag(semesterTag);
+    newCourse.setCourseTag(courseTag);
+    newCourse.setCourseName(courseName);
+    newCourse.setCredits(courseCredits);
+    newCourse.setLetterGrade(courseGrade);
+
+    listOfCourses.push_back(newCourse);
 }
 
 void PrintDivider()
